@@ -1,0 +1,2 @@
+{"id":"food-eval-001","image":"data/test/example.jpg","prompt":"这张图片里最主要的菜是什么？","response":"一碗辣椒炒肉。"}
+{"id":"food-eval-002","image":"data/test/example.jpg","prompt":"主菜旁边还放着什么？","response":"旁边还放着一碟配菜。"}
