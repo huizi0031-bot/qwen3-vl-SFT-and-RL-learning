@@ -1,0 +1,30 @@
+{
+  "samples": 20,
+  "base_exact_matches": 1,
+  "lora_exact_matches": 7,
+  "improved_ids": [
+    "chartqa-val-000000",
+    "chartqa-val-000001",
+    "chartqa-val-000005",
+    "chartqa-val-000007",
+    "chartqa-val-000008",
+    "chartqa-val-000010"
+  ],
+  "regressed_ids": [],
+  "unchanged_ids": [
+    "chartqa-val-000002",
+    "chartqa-val-000003",
+    "chartqa-val-000004",
+    "chartqa-val-000006",
+    "chartqa-val-000009",
+    "chartqa-val-000011",
+    "chartqa-val-000012",
+    "chartqa-val-000013",
+    "chartqa-val-000014",
+    "chartqa-val-000015",
+    "chartqa-val-000016",
+    "chartqa-val-000017",
+    "chartqa-val-000018",
+    "chartqa-val-000019"
+  ]
+}

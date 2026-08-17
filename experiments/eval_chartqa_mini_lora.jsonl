@@ -1,0 +1,20 @@
+{"id": "chartqa-val-000000", "prompt": "What's the color of graph with 56 as the highest value?", "reference": "Blue", "prediction": "Blue", "normalized_exact_match": true}
+{"id": "chartqa-val-000001", "prompt": "In which year the difference between blue and green graph 1?", "reference": "2018", "prediction": "2018", "normalized_exact_match": true}
+{"id": "chartqa-val-000002", "prompt": "What does the blue line represent?", "reference": "Not too much/not at all", "prediction": "Net not much/ not at all", "normalized_exact_match": false}
+{"id": "chartqa-val-000003", "prompt": "What is the max value of blue line?", "reference": "0.72", "prediction": "73", "normalized_exact_match": false}
+{"id": "chartqa-val-000004", "prompt": "What's the percentage of respondents who say Job is a top priority for the president and Congress in 2016?", "reference": "68", "prediction": "63", "normalized_exact_match": false}
+{"id": "chartqa-val-000005", "prompt": "Which line has the lowest value of 71%?", "reference": "Economy", "prediction": "Economy", "normalized_exact_match": true}
+{"id": "chartqa-val-000006", "prompt": "What is the unfavourable value in 2014?", "reference": "64", "prediction": "64", "normalized_exact_match": true}
+{"id": "chartqa-val-000007", "prompt": "What is the median value of favourable line in the graph?", "reference": "40", "prediction": "40", "normalized_exact_match": true}
+{"id": "chartqa-val-000008", "prompt": "Which answer response has the highest value on this graph?", "reference": "Disapprove", "prediction": "Disapprove", "normalized_exact_match": true}
+{"id": "chartqa-val-000009", "prompt": "How many data points on the disapprove line are above 50?", "reference": "2", "prediction": "3", "normalized_exact_match": false}
+{"id": "chartqa-val-000010", "prompt": "Which indicator remains all time lowest from Dec. 2008 to Sep. 2011?", "reference": "Mostly good news", "prediction": "Mostly good news", "normalized_exact_match": true}
+{"id": "chartqa-val-000011", "prompt": "How much value of 'Mostly bad news' increased from Jan. 2011 to Sept. 2011?", "reference": "37", "prediction": "1", "normalized_exact_match": false}
+{"id": "chartqa-val-000012", "prompt": "When does the red line reach the peak?", "reference": "44538", "prediction": "Dec 2010", "normalized_exact_match": false}
+{"id": "chartqa-val-000013", "prompt": "What's the total sum of peak points of all three lines?", "reference": "155", "prediction": "200", "normalized_exact_match": false}
+{"id": "chartqa-val-000014", "prompt": "When does the yellow line reach the peak?", "reference": "44207", "prediction": "Dec 2009", "normalized_exact_match": false}
+{"id": "chartqa-val-000015", "prompt": "What's the total sum of peak points of green and red lines?", "reference": "87", "prediction": "144", "normalized_exact_match": false}
+{"id": "chartqa-val-000016", "prompt": "What's the lowest value of yellow line?", "reference": "19", "prediction": "35", "normalized_exact_match": false}
+{"id": "chartqa-val-000017", "prompt": "What's the difference of value of highiest value of red and lowest value of green line?", "reference": "79", "prediction": "55", "normalized_exact_match": false}
+{"id": "chartqa-val-000018", "prompt": "What is the colour of oppose in the graph?", "reference": "Light blue", "prediction": "Blue", "normalized_exact_match": false}
+{"id": "chartqa-val-000019", "prompt": "How many times there is 44 value in the Favor?", "reference": "3", "prediction": "2", "normalized_exact_match": false}

@@ -28,7 +28,7 @@ def normalize(text: str) -> str:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", default="data/demo/eval.jsonl")
-    parser.add_argument("--adapter", default="outputs/lora-food-batch-demo")
+    parser.add_argument("--adapter", default=None)
     parser.add_argument("--output", default="experiments/eval_lora_food_batch_demo.jsonl")
     parser.add_argument("--max-new-tokens", type=int, default=128)
     args = parser.parse_args()
@@ -44,10 +44,15 @@ def main():
         torch_dtype=torch.bfloat16,
         local_files_only=True,
     ).to(device)
-    model = PeftModel.from_pretrained(
+    model = base_model
+
+    if args.adapter:
+      model = PeftModel.from_pretrained(
         base_model,
         resolve_path(args.adapter),
-    ).eval()
+    )
+
+    model.eval()
 
     output_path = resolve_path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
