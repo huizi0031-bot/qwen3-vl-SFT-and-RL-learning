@@ -22,3 +22,5 @@ data/processed/
 
 # System files
 .DS_Store
+
+data/chartqa_mini/
