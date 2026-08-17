@@ -1,2 +1,3 @@
 {"id":"food-demo-001","image":"data/test/example.jpg","prompt":"请描述这张图片。","response":"木桌上摆着一碗辣椒炒肉，旁边还有一碟配菜。"}
-
+{"id":"food-demo-002","image":"data/test/example.jpg","prompt":"图片中的主菜是什么？","response":"一碗辣椒炒肉。"}
+{"id":"food-demo-003","image":"data/test/example.jpg","prompt":"桌上除了主菜还有什么？","response":"旁边还有一碟配菜。"}

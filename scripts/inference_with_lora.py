@@ -24,7 +24,7 @@ def main():
     parser.add_argument("--image", default="data/test/example.jpg")
     parser.add_argument("--question", default="请描述这张图片。")
     parser.add_argument("--adapter", default="outputs/lora-food-demo")
-    parser.add_argument("--max-new-tokens", type=int, default=64)
+    parser.add_argument("--max-new-tokens", type=int, default=512)
     args = parser.parse_args()
 
     image_path = resolve_from_project(args.image)
