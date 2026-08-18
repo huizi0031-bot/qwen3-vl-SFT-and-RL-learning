@@ -1,0 +1,25 @@
+{
+  "evaluated_samples": 1920,
+  "relaxed_correct": 42,
+  "relaxed_accuracy": 0.021875,
+  "exact_correct": 37,
+  "numeric_relaxed_correct": 5,
+  "by_human_or_machine": {
+    "0": {
+      "total": 960,
+      "correct": 42,
+      "accuracy": 0.04375
+    },
+    "1": {
+      "total": 960,
+      "correct": 0,
+      "accuracy": 0.0
+    }
+  },
+  "adapter": "base_model",
+  "max_new_tokens": 32,
+  "image_size": [
+    448,
+    448
+  ]
+}

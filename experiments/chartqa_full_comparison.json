@@ -1,0 +1,284 @@
+{
+  "total_samples": 1920,
+  "base_correct": 42,
+  "lora_correct": 1506,
+  "base_relaxed_accuracy": 0.021875,
+  "lora_relaxed_accuracy": 0.784375,
+  "accuracy_change_percentage_points": 76.25,
+  "improved_count": 1465,
+  "regressed_count": 1,
+  "both_correct_count": 41,
+  "both_wrong_count": 413,
+  "by_subset": {
+    "0": {
+      "total": 960,
+      "base_correct": 42,
+      "lora_correct": 689,
+      "base_accuracy": 0.04375,
+      "lora_accuracy": 0.7177083333333333
+    },
+    "1": {
+      "total": 960,
+      "base_correct": 0,
+      "lora_correct": 817,
+      "base_accuracy": 0.0,
+      "lora_accuracy": 0.8510416666666667
+    }
+  },
+  "improved_examples": [
+    {
+      "id": "chartqa-val-000001",
+      "question": "In which year the difference between blue and green graph 1?",
+      "answers": [
+        "2018"
+      ],
+      "base_prediction": "Looking at the chart, we need to find the year where the difference between the blue line (U.S.) and the green line (Germany) is exactly",
+      "lora_prediction": "2018",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000002",
+      "question": "What does the blue line represent?",
+      "answers": [
+        "Not too much/not at all"
+      ],
+      "base_prediction": "Based on the chart provided, the blue line represents the percentage of respondents who believe the U.S. takes the interest of their country **“Not too much/not",
+      "lora_prediction": "Not too much/not at all",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000005",
+      "question": "Which line has the lowest value of 71%?",
+      "answers": [
+        "Economy"
+      ],
+      "base_prediction": "Based on the provided line chart, the line that has the value of **71%** is the **Economy** line.\n\nHere's the breakdown:",
+      "lora_prediction": "Economy",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000007",
+      "question": "What is the median value of favourable line in the graph?",
+      "answers": [
+        "40"
+      ],
+      "base_prediction": "To find the **median value** of the **favorable** line (green line) in the graph, we need to look at the values at each point",
+      "lora_prediction": "40",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000008",
+      "question": "Which answer response has the highest value on this graph?",
+      "answers": [
+        "Disapprove"
+      ],
+      "base_prediction": "Based on the provided graph, the highest value is **53**, which corresponds to the **Disapprove** line in **November 2013**",
+      "lora_prediction": "Disapprove",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000010",
+      "question": "Which indicator remains all time lowest from Dec. 2008 to Sep. 2011?",
+      "answers": [
+        "Mostly good news"
+      ],
+      "base_prediction": "Based on the provided line chart from the Pew Research Center, the indicator that remains at its all-time lowest level from December 2008 to September",
+      "lora_prediction": "Mostly good news",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000016",
+      "question": "What's the lowest value of yellow line?",
+      "answers": [
+        "19"
+      ],
+      "base_prediction": "Looking at the yellow line (labeled \"Mix of good and bad news\") in the chart:\n\n- It starts at 80 in December 20",
+      "lora_prediction": "19",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000017",
+      "question": "What's the difference of value of highiest value of red and lowest value of green line?",
+      "answers": [
+        "79"
+      ],
+      "base_prediction": "To find the difference between the **highest value of the red line** and the **lowest value of the green line**, let’s analyze the chart:\n\n---\n\n###",
+      "lora_prediction": "79",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000018",
+      "question": "What is the colour of oppose in the graph?",
+      "answers": [
+        "Light blue"
+      ],
+      "base_prediction": "Based on the provided line graph, the color representing \"Oppose\" is **light blue**.\n\nThe graph displays two lines:\n- The **light blue line",
+      "lora_prediction": "Light blue",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000020",
+      "question": "What is the percentage of people who are dissatisfied with Spain's democracy?",
+      "answers": [
+        "68"
+      ],
+      "base_prediction": "According to the pie chart, **68%** of Spanish adults are dissatisfied with how democracy is working in Spain.",
+      "lora_prediction": "68",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000021",
+      "question": "What is the ratio of people who are dissatisfied and satisfied with Spain's democracy?",
+      "answers": [
+        "2.125"
+      ],
+      "base_prediction": "To find the ratio of people who are **dissatisfied** to **satisfied** with Spain’s democracy, we use the percentages from the pie chart:",
+      "lora_prediction": "2.125",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000022",
+      "question": "Is the Pie chart divided into 3 segment?",
+      "answers": [
+        "Yes"
+      ],
+      "base_prediction": "Yes, the pie chart is divided into **three segments**.\n\nThe segments represent the following responses from the survey:\n\n- **73%** — \"No",
+      "lora_prediction": "Yes",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000023",
+      "question": "IS the value of No more then sum of Yes and Dk?",
+      "answers": [
+        "Yes"
+      ],
+      "base_prediction": "Yes, the value of **\"No\" (73%)** is more than the sum of **\"Yes\" (17%)** and **\"",
+      "lora_prediction": "Yes",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000026",
+      "question": "Is the color of 53% segment light green?",
+      "answers": [
+        "No"
+      ],
+      "base_prediction": "No, the color of the 53% segment is not light green. Based on the pie chart provided, the 53% segment, which represents",
+      "lora_prediction": "No",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000027",
+      "question": "What's the ratio of Lean Republican segment and Republican segment?",
+      "answers": [
+        "0.7358"
+      ],
+      "base_prediction": "To find the ratio of the **Lean Republican** segment to the **Republican** segment, we use the percentages given in the pie chart:\n\n- **Lean Republican",
+      "lora_prediction": "0.7358490566037736",
+      "base_match_type": "incorrect",
+      "lora_match_type": "numeric_relaxed",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000036",
+      "question": "What does dark blue bar represents?",
+      "answers": [
+        "Very Important"
+      ],
+      "base_prediction": "Based on the chart provided, the **dark blue bar** represents:\n\n**\"Very important\"**\n\nThis is indicated by the label directly above the dark blue bar",
+      "lora_prediction": "Very important",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000038",
+      "question": "What does the color green indicate?",
+      "answers": [
+        "Support"
+      ],
+      "base_prediction": "Based on the chart provided, the green color indicates **\"Support\"**.\n\nThe chart is titled \"Japanese back measures to help developing countries\" and shows percentages",
+      "lora_prediction": "Support",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000039",
+      "question": "What is the difference between the longest and the shortest green bar?",
+      "answers": [
+        "7"
+      ],
+      "base_prediction": "To find the difference between the longest and the shortest green bar, we need to identify the percentages for each \"Support\" category (the green bars) from the",
+      "lora_prediction": "7",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000042",
+      "question": "How many bars are there in the graph?",
+      "answers": [
+        "2"
+      ],
+      "base_prediction": "There are **2 bars** in the graph. Each bar represents a country: **Mauritius** and **Cyprus**.",
+      "lora_prediction": "2",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    },
+    {
+      "id": "chartqa-val-000043",
+      "question": "What is the total sum of both the bars?",
+      "answers": [
+        "7.81"
+      ],
+      "base_prediction": "To find the total sum of both bars, we add the values for Mauritius and Cyprus:\n\n- Mauritius: **6.47**\n- Cyprus:",
+      "lora_prediction": "7.81",
+      "base_match_type": "incorrect",
+      "lora_match_type": "exact",
+      "subset": "0"
+    }
+  ],
+  "regressed_examples": [
+    {
+      "id": "chartqa-val-000236",
+      "question": "Which region is represented by the given line graph?",
+      "answers": [
+        "South Eastern Asia"
+      ],
+      "base_prediction": "South Eastern Asia",
+      "lora_prediction": "South East Asia",
+      "base_match_type": "exact",
+      "lora_match_type": "incorrect",
+      "subset": "0"
+    }
+  ]
+}

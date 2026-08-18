@@ -1,0 +1,25 @@
+{
+  "evaluated_samples": 1920,
+  "relaxed_correct": 1506,
+  "relaxed_accuracy": 0.784375,
+  "exact_correct": 1283,
+  "numeric_relaxed_correct": 223,
+  "by_human_or_machine": {
+    "0": {
+      "total": 960,
+      "correct": 689,
+      "accuracy": 0.7177083333333333
+    },
+    "1": {
+      "total": 960,
+      "correct": 817,
+      "accuracy": 0.8510416666666667
+    }
+  },
+  "adapter": "outputs/chartqa-full-lora/final_adapter",
+  "max_new_tokens": 32,
+  "image_size": [
+    448,
+    448
+  ]
+}
