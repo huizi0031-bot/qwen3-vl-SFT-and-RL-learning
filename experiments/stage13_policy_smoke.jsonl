@@ -1,0 +1,4 @@
+{"id": "chartqa-val-000000", "prompt": "What's the color of graph with 56 as the highest value?", "all_answers": ["Blue"], "prediction": "Green", "relaxed_correct": false, "match_type": "incorrect", "human_or_machine": 0}
+{"id": "chartqa-val-000001", "prompt": "In which year the difference between blue and green graph 1?", "all_answers": ["2018"], "prediction": "2018", "relaxed_correct": true, "match_type": "exact", "human_or_machine": 0}
+{"id": "chartqa-val-000002", "prompt": "What does the blue line represent?", "all_answers": ["Not too much/not at all"], "prediction": "Not too much/not at all", "relaxed_correct": true, "match_type": "exact", "human_or_machine": 0}
+{"id": "chartqa-val-000003", "prompt": "What is the max value of blue line?", "all_answers": ["0.72"], "prediction": "72", "relaxed_correct": false, "match_type": "incorrect", "human_or_machine": 0}
