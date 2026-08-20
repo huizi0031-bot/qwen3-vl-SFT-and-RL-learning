@@ -17,10 +17,12 @@ LoRA 参数更新
   ↓
 完整 ChartQA SFT 与生成式评估
   ↓
-保存 SFT adapter（未来 RL 的起点）
+TRL SFTTrainer 框架对照
+  ↓
+冻结 SFT adapter（未来 RL 的起点）
 ```
 
-仓库当前聚焦 **Project A：SFT**。Project B（偏好学习、DPO、GRPO/RL）会复用这里的 SFT adapter、数据格式和评估约定，但不会和当前 SFT 学习混在一起。
+Project A：SFT 已完成到 Stage 12。Project B（偏好学习、DPO、GRPO/RL）会复用这里的 SFT adapter、数据格式和评估约定；后续按单一阶段推进，每完成、验证和记录一个阶段后再进入下一个。
 
 ---
 
@@ -40,8 +42,15 @@ LoRA 参数更新
 - [x] Stage 9：ChartQA Mini LoRA 训练与评估
 - [x] Stage 10：完整 ChartQA 单卡 LoRA SFT、checkpoint、loss 可视化
 - [x] Stage 11：完整 ChartQA validation 生成式评估与配对比较
-- [ ] Stage 12：ChartQA test 最终盲测
-- [ ] Project B：偏好数据、DPO、GRPO/RL
+- [x] Stage 12：TRL `SFTTrainer` 完整训练、评估与手写 trainer 对照
+- [ ] Stage 13：加载并验证 SFT policy，建立 RL 基线
+- [ ] Stage 14：构造小规模偏好数据
+- [ ] Stage 15：单 batch DPO 原理与最小闭环
+- [ ] Stage 16：完整 DPO 实验与评估
+- [ ] Stage 17：ChartQA 可验证 reward 设计与测试
+- [ ] Stage 18：小规模 GRPO 学习闭环
+- [ ] Stage 19：GRPO 扩展实验与 SFT / DPO / GRPO 对比
+- [ ] Stage 20（可选）：DPO → GRPO、Reward Model 与 PPO
 
 ### 当前完整 SFT 实验结果
 
@@ -57,7 +66,10 @@ LoRA 参数更新
 | epoch | 1 | 固定配置下的完整基线实验 |
 | LoRA | `r=8`，`alpha=16`，`q_proj`/`v_proj` | 基座冻结，只训练 attention 内的低秩增量 |
 | 基座 val relaxed accuracy | 2.19%（42/1920） | 未经本任务 SFT 的基座表现 |
-| LoRA val relaxed accuracy | 78.44%（1506/1920） | 完整 ChartQA SFT 后的表现 |
+| 手写 LoRA val relaxed accuracy | 78.44%（1506/1920） | Stage 10/11 的完整 ChartQA SFT 表现 |
+| TRL LoRA val relaxed accuracy | 78.44%（1506/1920） | Stage 12，与手写 trainer 完全一致 |
+| TRL train loss / val loss | 0.2334 / 0.2556 | `SFTTrainer` 在 3,538 steps 后的记录 |
+| RL 起始 adapter | `outputs/chartqa-full-trl-lora/final_adapter/` | 只读保存；后续每条 RL 路线都从它独立分支 |
 
 > 当前的 78.44% 是 validation 结果。若以后根据 validation 去选择 epoch、学习率、rank 或图像尺寸，validation 就成为开发集；最后应在尚未使用过的 test 上报告泛化结果。
 
@@ -396,6 +408,39 @@ lora_correct_count = len(both_correct) + len(improved)
 
 ---
 
+### Stage 12：TRL `SFTTrainer` 框架对照
+
+这一阶段没有追求更高分，而是用同一份完整 ChartQA 数据、同一 LoRA 配置和同一评估规则，确认 TRL 的框架训练能复现手写 trainer 的结果。这样进入 DPO / GRPO 前，已经知道框架替代了哪些样板代码，而没有跳过 SFT 的底层因果链路。
+
+| 文件 / 目录 | 作用 |
+|---|---|
+| `scripts/train_chartqa_trl.py` | 使用 `trl.SFTTrainer` 的完整单卡 VLM SFT |
+| `scripts/plot_trl_history.py` | 从 `trainer_state.json` 生成 loss 曲线 |
+| `experiments/chartqa_full_trl_val.jsonl` | TRL adapter 的逐条 validation 生成结果 |
+| `experiments/chartqa_full_trl_val.summary.json` | 生成式评分摘要 |
+| `outputs/chartqa-full-trl-lora/final_adapter/` | 选定的、供后续 RL 复用的 SFT adapter |
+
+数据在进入框架前从 `image / prompt / response` 映射为图像、prompt 和 completion；仍然只对 completion 计算 loss。关键配置保持不变：28,299 条 train、1,920 条 val、1 epoch、`batch_size=1`、梯度累积 8、`learning_rate=1e-4`、cosine scheduler、bf16、gradient checkpointing，以及 `r=8 / alpha=16 / q_proj,v_proj` 的 LoRA。
+
+| 指标 | 手写 trainer | TRL `SFTTrainer` |
+|---|---:|---:|
+| validation relaxed accuracy | 78.44%（1506/1920） | 78.44%（1506/1920） |
+| train loss | — | 0.2334 |
+| validation loss | — | 0.2556 |
+| 训练步数 | — | 3,538 |
+
+结论：两条路线的生成式准确率完全一致。Stage 12 证明的是训练框架迁移的等价性，不是模型质量提升；因此后续 RL 的统一起点固定为：
+
+```text
+base model  = Qwen3-VL-4B-Instruct
+SFT adapter = outputs/chartqa-full-trl-lora/final_adapter/
+SFT baseline = validation relaxed accuracy 78.44%
+```
+
+该 adapter 视为只读基线，DPO、GRPO 和任何后续实验都保存到新的输出目录，绝不覆盖它。
+
+---
+
 ## 3. 当前 trainer 用了什么库，没用什么库
 
 ```text
@@ -404,7 +449,7 @@ PyTorch
   ├── 手写 collator
   ├── loss.backward()
   ├── AdamW optimizer.step()
-  └── checkpoint / 指标写入
+  └── 手写 trainer 的 checkpoint / 指标写入
 
 Transformers
   ├── Qwen3VLForConditionalGeneration
@@ -413,6 +458,9 @@ Transformers
 PEFT
   └── get_peft_model()：向 q_proj / v_proj 注入 LoRA
 
+TRL
+  └── SFTTrainer：Stage 12 的数据整理、loss、optimizer、scheduler、checkpoint 与日志封装
+
 qwen_vl_utils
   └── process_vision_info()：读取多模态消息中的图片
 
@@ -420,31 +468,43 @@ Matplotlib
   └── 从 metrics.jsonl 生成 loss_curve.png 与对比图
 ```
 
-当前**没有使用**：
+当前**还没有使用**：
 
 ```text
-TRL SFTTrainer       # 尚未使用
 transformers.Trainer # 尚未使用
 Accelerate / DDP     # 尚未使用
 DeepSpeed            # 尚未使用
 bitsandbytes / QLoRA # 尚未使用
+DPOTrainer / GRPOTrainer / PPOTrainer
 ```
 
-这不是功能缺失，而是学习设计：先看懂透明的原生流程，再使用框架自动化它。
+这不是功能缺失，而是学习顺序：先看懂透明的原生流程，再验证框架自动化是否等价，最后才将同一个 SFT policy 接入偏好优化与 RL。
 
-| 当前实现 | 熟练后可替代为 | 替代后得到什么 |
+| 已掌握实现 | 对应职责 | 后续学习连接点 |
 |---|---|---|
-| 手写 PyTorch loop | `transformers.Trainer` | 标准化日志、checkpoint、训练参数管理 |
-| 手写 collator | TRL `SFTTrainer` + VLM 数据格式 | 更少样板代码，并自然接入 DPO/GRPO |
-| 单卡 `cuda:0` | `accelerate launch` / `torchrun` / DDP | 多卡数据并行 |
-| bf16 LoRA | QLoRA + bitsandbytes | 更低显存，但引入量化复杂度 |
-| JSONL + Matplotlib | W&B / MLflow / TensorBoard | 更强实验追踪和可视化 |
+| 手写 PyTorch loop | 手工展示 `labels → loss → backward → optimizer → LoRA update` | 理解 DPO / GRPO 的 loss 或 reward 从何而来 |
+| TRL `SFTTrainer` | 标准化训练、评估、checkpoint、日志 | 以同一 TRL / PEFT 栈自然进入 `DPOTrainer` / `GRPOTrainer` |
+| 单卡 `cuda:0` | 可控的显存、时间与随机性 | RL 第一轮仍坚持单卡、小数据、小生成组 |
+| bf16 LoRA | 低成本训练 adapter | 每种 RL 算法保存独立 adapter，不覆盖 SFT 基线 |
+| JSONL + Matplotlib | 可复核的数据和指标记录 | 继续保存偏好对、reward 统计和逐条预测 |
 
-> 不急于用 TRL 覆盖当前脚本。手写 trainer 已经把 `labels → loss → backward → optimizer → LoRA update` 的因果关系展示出来；之后再用 TRL，才能明确它替你封装了什么。
+> Stage 12 没有覆盖或删除手写 trainer。两套实现并存：手写版本用于理解，TRL 版本作为后续 RL 学习的工程起点。
 
 ---
 
-## 4. SFT 如何连接未来 RL
+## 4. 从 SFT adapter 开始的 RL 学习计划
+
+Project B 的目标是学习完整的偏好优化与可验证奖励流程，不是立即追求一个更高的数字。整个项目固定复用 Stage 12 的 SFT policy：
+
+```text
+base model  = Qwen3-VL-4B-Instruct
+SFT adapter = outputs/chartqa-full-trl-lora/final_adapter/
+baseline    = validation relaxed accuracy 78.44%
+```
+
+第一轮 DPO 和第一轮 GRPO 都从该 SFT adapter 独立分支。这样可以清楚区分“DPO 带来的变化”和“GRPO 带来的变化”；只有两条路线都掌握后，才把 DPO adapter 继续接到 GRPO。
+
+### 数据与评估边界
 
 当前 SFT 样本：
 
@@ -456,31 +516,66 @@ bitsandbytes / QLoRA # 尚未使用
 }
 ```
 
-未来偏好学习样本可以扩展为：
+Stage 14 形成的偏好样本：
 
 ```json
 {
   "image": "path/to/chart.jpg",
   "prompt": "What is the value in 2024?",
   "chosen": "51",
-  "rejected": "61"
+  "rejected": "61",
+  "source": "sft-generation-or-rule",
+  "preference_reason": "chosen matches the chart answer"
 }
 ```
 
-两部分的目标不同：
+- RL 训练只使用 train 或单独划出的 RL-train 数据；validation 和 test 不进入偏好对构造、reward 拟合或参数更新。
+- 每个阶段都在相同的 1,920 条 validation 上报告 relaxed accuracy；test 保持为最终一次性泛化评估，不参与路线选择。
+- `final_adapter/` 永远只读；新产物命名为 `outputs/chartqa-dpo-lora/`、`outputs/chartqa-grpo-lora/` 等独立目录。
+
+### 学习顺序与阶段验收
+
+| 阶段 | 本阶段只学习什么 | 产物与通过条件 |
+|---|---|---|
+| Stage 13：SFT policy 基线 | 加载 base + Stage 12 adapter；区分 policy、冻结 reference policy、reward、rollout 四个角色 | 用同一评估脚本复现约 78.44%；记录模型路径、generation 配置和显存 |
+| Stage 14：偏好数据 | 让 SFT policy 为同一图文问题生成多个候选；按答案正确性优先、格式规范次之，标出 `chosen / rejected` | 人工检查 20～50 对；检查重复、训练/验证泄漏和“仅因答案更长而获胜”的偏差；此阶段不训练 |
+| Stage 15：最小 DPO | 在一个小 batch 上逐项观察 chosen/rejected 的 log-prob、reference log-prob 和 DPO loss | 能解释 loss 的方向；用 20～50 对做最小过拟合实验；保存笔记和日志 |
+| Stage 16：正式 DPO | 用 TRL `DPOTrainer` 训练一个小规模、可复现实验；policy 从 SFT adapter 初始化，reference 固定为训练前的 SFT policy | 保存 `chartqa-dpo-lora`；同时报告 preference 指标与 ChartQA validation relaxed accuracy，确认没有遗忘 SFT 任务 |
+| Stage 17：可验证 reward | 为 ChartQA 写 reward：答案 relaxed match 为主，数值容差和输出格式为辅；枚举正确、错误、空答案、绕格式等样例 | reward 函数单独测试通过；检查不会给冗长解释、投机格式或空回答异常高分；此阶段不训练 |
+| Stage 18：最小 GRPO | 从原始 SFT adapter 出发，对一个 prompt 采样小组候选，理解组内相对奖励与 advantage | 小数据、小生成组完成一次闭环；记录 reward 分布、零方差组比例、样例与 validation 指标 |
+| Stage 19：GRPO 对照 | 扩大到受控规模，但保持模型、数据划分与评估规则不变 | 在同一 validation 上比较 Base / SFT / DPO / GRPO 的准确率、格式错误和训练成本；保存独立 adapter |
+| Stage 20（可选） | DPO → GRPO 的串联、Reward Model、PPO | 只在前述分支都有清晰结论后再开始；PPO 最后学习，因为它额外引入 value / rollout / 显存复杂度 |
+
+### 为什么按这个顺序
 
 ```text
-SFT：学习“面对图片和问题，应怎样产生任务答案”。
-DPO / GRPO：在多个候选答案中，学习“哪个回答更符合偏好或 reward”。
+SFT policy 基线
+  ↓
+偏好对（离线、可人工审查）
+  ↓
+DPO（先理解相对偏好优化）
+  ↓
+可验证 reward（先验证奖励本身）
+  ↓
+GRPO（再学习带采样的策略优化）
+  ↓
+统一比较；最后才进入 PPO / Reward Model
 ```
 
-进入 RL 前应保留：
+DPO 是离线偏好优化：它比较 `chosen` 与 `rejected` 相对冻结 reference policy 的概率，不需要先训练显式 reward model。GRPO 是基于采样候选和 reward 的策略优化。因此先把偏好数据和 reward 分别做干净，再让模型优化它们。
 
-- `outputs/chartqa-full-lora/final_adapter/`；
-- 基座模型路径、processor 和 chat template；
-- 图片尺寸、随机种子、训练配置；
-- train / val / test 划分；
-- loss 图、预测结果和 relaxed accuracy 规则。
+建议的新增目录只用于未来 Project B，不改动现有 SFT 复现脚本：
+
+```text
+rl/
+  data/          # 小型偏好对、reward 测试样例与数据清单
+  scripts/       # 每个阶段的最小可运行脚本
+  experiments/   # 指标、样例、对比结果
+  notes/         # 本阶段原理、疑问和结论
+  configs/       # 可复现实验配置
+```
+
+每一阶段都遵守同一个闭环：先写清要验证的问题，再跑最小实验，检查失败样例和指标，最后更新 README / notes；没有通过验收就不进入下一阶段。
 
 ---
 
@@ -524,19 +619,15 @@ Git commit
 
 ## 6. 暂停后的下一步
 
-当前可以安全暂停。恢复时不必同时做所有事，可以选择一条独立路线：
+下一步只做 **Stage 13：SFT policy 基线**，不要同时启动 DPO 和 GRPO：
 
-1. **Stage 12：test 最终盲测**
-   导出 ChartQA test，对固定的 base 与 LoRA 配置做最终评估；看过 test 后不再据它调参。
+1. 加载 `Qwen3-VL-4B-Instruct + outputs/chartqa-full-trl-lora/final_adapter/`。
+2. 在固定 validation 配置上复现约 78.44% relaxed accuracy。
+3. 将这个可运行对象命名为 `sft_policy`，并保存一次不可训练的 reference snapshot。
+4. 写一页笔记：policy、reference policy、候选生成、reward 分别是什么；列出 Stage 14 需要的偏好数据字段。
 
-2. **SFT 工程对照**
-   用同一数据和超参数写 `transformers.Trainer` 或 TRL `SFTTrainer` 版本，对照它们与当前手写 trainer 的职责边界。
-
-3. **SFT 扩展实验**
-   在 val 上一次只改一个变量，例如 epoch、learning rate、LoRA rank、分辨率、QLoRA 或多卡，并保留每次配置和结果。
-
-完成 SFT 的沉淀后，才进入 Project B：偏好数据构造 → DPO → 可验证 reward → GRPO / RL。
+Stage 13 验收通过后，才进入 Stage 14 的 20～50 对偏好数据。任何一阶段如果 validation 明显退化、样本检查不通过或概念还解释不清，就留在当前阶段排查，不跳到下一种算法。
 
 ---
 
-> **核心原则：先用一张 GPU、一个透明的原生训练器，真正理解从图文数据到 LoRA 参数更新的全过程；再用 TRL、QLoRA 和多卡把已经理解的流程工程化、规模化，最后把 SFT adapter 作为 RL 的起点。**
+> **核心原则：先用一张 GPU 和透明的手写 trainer 理解 SFT；再用 Stage 12 验证 TRL 框架等价；之后始终从冻结的 SFT adapter 分支，以“数据 → 单 batch → 小实验 → 统一评估”的节奏学习 DPO 和 GRPO。**
