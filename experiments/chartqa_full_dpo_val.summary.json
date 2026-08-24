@@ -1,0 +1,25 @@
+{
+  "evaluated_samples": 1920,
+  "relaxed_correct": 1513,
+  "relaxed_accuracy": 0.7880208333333333,
+  "exact_correct": 1279,
+  "numeric_relaxed_correct": 234,
+  "by_human_or_machine": {
+    "0": {
+      "total": 960,
+      "correct": 692,
+      "accuracy": 0.7208333333333333
+    },
+    "1": {
+      "total": 960,
+      "correct": 821,
+      "accuracy": 0.8552083333333333
+    }
+  },
+  "adapter": "outputs/chartqa-dpo-lora/final_adapter",
+  "max_new_tokens": 32,
+  "image_size": [
+    448,
+    448
+  ]
+}
